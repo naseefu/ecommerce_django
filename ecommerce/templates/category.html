@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:155 }}
+    {% else %}
+        Welcome to XPAIN SHOPPE where you can buy different items....
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+    {% if category %}
+        {{ category.name }} - XPAIN SHOPPE
+    {% else %}
+       See our New Collections - Xpain Shoppe
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if category %}
+        <div>
+            <div class="row my_row_class">
+                <div class="mx-auto">
+                <p><a class="btn btn-outline-warning" href="{% url 'ecommerceapp:allProdCat' %}">Our Product Collections >></a> </p>
+            </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="mx-auto">
+        {% if category %}
+            <img class="my_image" src="{{ category.image.url }}" alt="{{ category.name }}">
+    </div>
+            <br>
+    <div>
+            <h1 class="text-center my_title" >{{ category.name }}</h1>
+            <p class="text-justify">{{ category.description }}</p>
+    </div>
+        {% else %}
+            <br>
+            <div>
+            <img class="my_image my_image_padding" src="{% static 'img/shop_banner.png' %}" alt="our products" height="400px" width="1200px">
+            </div>
+            <br>
+            <br>
+            <div>
+                <h1 class="text-center my_title" style="font-weight: bold; font-size: 30px">Our Products Collections</h1>
+                <p class="text-justify product_para">Welcome to our curated world of possibilities – Explore our meticulously crafted collections, where every product tells a unique story. Our ecommerce platform showcases a thoughtfully assembled selection that transcends mere merchandise; it's a celebration of style, functionality, and quality. Dive into a symphony of choices, from timeless classics to the latest trends, each item handpicked to elevate your experience.<br><br>
+                Discover the essence of innovation and craftsmanship as you navigate through our meticulously organized product collections. From fashion-forward apparel to cutting-edge electronics, home essentials to lifestyle accessories, our diverse range caters to every taste and requirement.<br><br>
+                Our commitment to excellence is evident in every product, ensuring that you not only receive a purchase but an investment in quality and satisfaction. Whether you're seeking the latest in technology, timeless fashion pieces, or functional everyday items, our collections are designed to inspire and enrich your life.<br><br>
+                Experience the convenience of online shopping with our user-friendly interface, secure transactions, and prompt delivery. Join us in exploring a world where every product is a testament to our dedication to providing you with the finest selections, all conveniently gathered in our thoughtfully curated collections.</p>
+            </div>
+            <br>
+            <br>
+        {% endif %}
+    <div>
+        <div>
+        <br>
+        <div class="container">
+            <div class="row mx_auto">
+            {% for prod in products.object_list %}
+                <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-lg-4">
+                    <div class="card text-center" style="min-width: 10rem;  margin-bottom: 15px">
+                        <a href="{{ prod.get_url }}"><img src="{{ prod.image.url }}" alt="{{ prod.name }}" style="height: 200px;object-fit: contain" class="card-img-top my_image"> </a>
+                    <div class="card-body">
+
+                        <h4>{{ prod.name }}</h4>
+                        <p>${{ prod.price }}</p>
+                    </div>
+                    </div>
+                </div>
+                <br>
+
+            {% endfor %}
+        </div>
+        <div class="mx-auto">
+
+            {% if products.paginator.num_pages > 1 %}
+
+            <hr>
+            <div class="text-center">
+                {% for pg in products.paginator.page_range %}
+                    <a href="?page={{ pg }}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{ pg }}</a>
+                {% endfor %}
+            </div>
+        {% endif %}
+        </div>
+        <br>
+        </div>
+        </div>
+    </div>
+    </div>
+    <br><br>
+{% endblock %}
