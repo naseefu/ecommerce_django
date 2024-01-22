@@ -43,7 +43,13 @@ def cart_detail(request,total=0,counter=0,cart_items=None):
             counter +=cart_item.quantity
     except ObjectDoesNotExist:
         pass
-    return render(request,'cart.html',dict(cart_items = cart_items,total = total, counter = counter))
+
+    product_instance = cart_items.first().product
+    c_slug = product_instance.category.slug
+    product_slug = product_instance.slug
+
+    product_detail_url = reverse('ecommerceapp:prodCatDetail',kwargs={'c_slug':c_slug,'product_slug':product_slug})
+    return render(request,'cart.html',dict(cart_items = cart_items,total = total, counter = counter, product_detail_url=product_detail_url))
 
 def cart_remove(request,product_id):
     cart = Cart.objects.get(cart_id = _cart_id(request))
